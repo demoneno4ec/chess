@@ -1,0 +1,36 @@
+body
+    position: relative
+    display: flex
+    flex-direction: column
+    min-height: 100vh
+
+footer
+    margin-top: auto
+
+main
+    display: flex
+    flex-grow: 1
+    flex-direction: column
+
+
+
+.btn
+    padding: 10px 30px
+    background-color: var(--main-blue-color)
+    color: var(--main-white-color)
+    text-align: center
+    position: relative
+    transition: .5s
+
+.btn.no-select
+    background-color: var(--form-grey-color)
+    cursor: pointer
+
+.btn.no-select:hover
+    background-color: var(--main-grey-color)
+
+.btn.selected
+    background-color: var(--red-first)
+
+.text-third
+    font-size: 14px

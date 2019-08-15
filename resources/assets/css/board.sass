@@ -1,0 +1,32 @@
+.square
+    width: 100vw
+    height: 100vw
+.board
+    max-width: 160px
+    max-height: 160px
+    display: flex
+    flex-wrap: wrap
+    margin: 0 auto
+    border: 8px solid #000
+
+.cell
+    max-width: 50%
+    max-height: 50%
+    display: flex
+    align-items: center
+    justify-content: center
+
+.cell.white
+    background-color: #d4d4d4
+
+.cell.black
+    background-color: #999
+
+.figure
+    font-size: 60px
+
+.white .king:before
+    content: $whiteKing
+
+.white .rook:before
+    content: $whiteRook
