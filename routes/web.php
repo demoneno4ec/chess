@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/', static function () {
-    return view('index');
-});
+Route::get('/chess/{type_chess}', 'ChessController@show');
