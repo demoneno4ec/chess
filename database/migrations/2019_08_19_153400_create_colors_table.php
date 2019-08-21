@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFiguresTable extends Migration
+class CreateColorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +12,7 @@ class CreateFiguresTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('figures', function (Blueprint $table) {
+        Schema::create('colors', static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code', 100)->unique();
             $table->string('name_ru', 100);
@@ -27,6 +26,6 @@ class CreateFiguresTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('figures');
+        Schema::dropIfExists('colors');
     }
 }

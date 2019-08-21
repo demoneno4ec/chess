@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Console\Commands\createChessDefault;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\EncryptCookies;
@@ -40,7 +39,6 @@ class Kernel extends HttpKernel
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
         TrustProxies::class,
-        createChessDefault::class,
     ];
 
     /**

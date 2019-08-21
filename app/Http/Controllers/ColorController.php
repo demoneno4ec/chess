@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Chess;
-use Illuminate\Contracts\View\Factory;
+use App\Models\Color;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\Response;
 
-class ChessController extends Controller
+class ColorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class ChessController extends Controller
      */
     public function index(): void
     {
-
+        //
     }
 
     /**
@@ -43,25 +42,21 @@ class ChessController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param $codeChess
-     * @return Factory|View
+     * @param  Color  $color
+     * @return void
      */
-    public function show($codeChess)
+    public function show(Color $color): void
     {
-        $chess = Chess::with('chessFigures')->where('code', $codeChess)->firstOrFail();
-
-        $table = $chess;
-
-        return view('index', ['table' => $table]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Chess  $chess
+     * @param  Color  $color
      * @return void
      */
-    public function edit(Chess $chess): void
+    public function edit(Color $color): void
     {
         //
     }
@@ -70,10 +65,10 @@ class ChessController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param  Chess  $chess
+     * @param  Color  $color
      * @return void
      */
-    public function update(Request $request, Chess $chess): void
+    public function update(Request $request, Color $color): void
     {
         //
     }
@@ -81,10 +76,10 @@ class ChessController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Chess  $chess
-     * @return void
+     * @param  Color  $color
+     * @return Response
      */
-    public function destroy(Chess $chess): void
+    public function destroy(Color $color): ?Response
     {
         //
     }

@@ -11,4 +11,4 @@
 |
 */
 
-Route::get('/chess/{type_chess}', 'ChessController@show');
+Route::get('/chess/{chess_code}', 'ChessController@show');

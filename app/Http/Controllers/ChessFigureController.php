@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\ChessFigure;
+use App\Models\ChessFigure;
 use Illuminate\Http\Request;
 
 class ChessFigureController extends Controller
@@ -10,9 +10,9 @@ class ChessFigureController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function index(): void
     {
         //
     }
@@ -20,9 +20,9 @@ class ChessFigureController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -30,10 +30,10 @@ class ChessFigureController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return void
      */
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         //
     }
@@ -41,10 +41,10 @@ class ChessFigureController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\ChessFigure  $chessFigure
-     * @return \Illuminate\Http\Response
+     * @param  ChessFigure  $chessFigure
+     * @return void
      */
-    public function show(ChessFigure $chessFigure)
+    public function show(ChessFigure $chessFigure): void
     {
         //
     }
@@ -52,10 +52,10 @@ class ChessFigureController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ChessFigure  $chessFigure
-     * @return \Illuminate\Http\Response
+     * @param  ChessFigure  $chessFigure
+     * @return void
      */
-    public function edit(ChessFigure $chessFigure)
+    public function edit(ChessFigure $chessFigure): void
     {
         //
     }
@@ -63,11 +63,11 @@ class ChessFigureController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ChessFigure  $chessFigure
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  ChessFigure  $chessFigure
+     * @return void
      */
-    public function update(Request $request, ChessFigure $chessFigure)
+    public function update(Request $request, ChessFigure $chessFigure): void
     {
         //
     }
@@ -75,10 +75,10 @@ class ChessFigureController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ChessFigure  $chessFigure
-     * @return \Illuminate\Http\Response
+     * @param  ChessFigure  $chessFigure
+     * @return void
      */
-    public function destroy(ChessFigure $chessFigure)
+    public function destroy(ChessFigure $chessFigure): void
     {
         //
     }
