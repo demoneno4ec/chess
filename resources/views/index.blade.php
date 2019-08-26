@@ -6,10 +6,10 @@
     <section class="play">
         <div class="square board">
             @foreach($table as $square)
-                <div class="square cell {{$square->color}}" data-index="{{$square->name}}">
-                    @if(!empty($square->figure))
+                <div class="square cell {{$square['color']}}" data-index="{{$square['code']}}">
+                    @if(!empty($square['figure']))
                         <div class="figure">
-                            <div class="{{$square->figure->name}}">{{$square->figure->html}}</div>
+                            <div class="{{$square['figure']['code']}}">{{$square['figure']['template']}}</div>
                         </div>
                     @endif
                 </div>

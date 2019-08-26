@@ -19,12 +19,15 @@ class CreateChessFiguresTable extends Migration
 
         Schema::create($this->tableName, static function (Blueprint $table) {
             $table->bigInteger('figure_id')->unsigned();
-            $table->bigInteger('chess_id')->unsigned();
+            $table->bigInteger('position_id')->unsigned();
         });
 
         Schema::table($this->tableName, static function(Blueprint $table) {
-            $table->foreign('figure_id')->references('id')->on('color_figures')->onDelete('CASCADE')->onUpdate('CASCADE');
-            $table->foreign('chess_id')->references('id')->on('chesses')->onDelete('CASCADE')->onUpdate('CASCADE');
+            $table->foreign('figure_id')->references('id')->on('figures')
+                ->onDelete('CASCADE')->onUpdate('CASCADE');
+
+            $table->foreign('position_id')->references('id')->on('chess_position_lists')
+                ->onDelete('CASCADE')->onUpdate('CASCADE');
         });
 
         DB::commit();
@@ -34,17 +37,18 @@ class CreateChessFiguresTable extends Migration
      * Reverse the migrations.
      *
      * @return void
+     * @throws Exception
      */
     public function down(): void
     {
         DB::beginTransaction();
 
-        Schema::table($this->tableName, static function(Blueprint $table) {
-            $table->dropForeign('chess_figures_figure_id_foreign');
-            $table->dropForeign('chess_figures_chess_id_foreign');
+        Schema::table($this->tableName, function(Blueprint $table) {
+            $table->dropForeign($this->tableName.'_figure_id_foreign');
+            $table->dropForeign($this->tableName.'_position_id_foreign');
         });
 
-        Schema::dropIfExists('chess_figures');
+        Schema::dropIfExists($this->tableName);
 
         DB::commit();
     }

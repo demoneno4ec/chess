@@ -3,9 +3,9 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateColorFiguresTable extends Migration
+class CreateFigureTemplatesTable extends Migration
 {
-    protected $tableName = 'color_figures';
+    protected $tableName = 'figure_templates';
 
     /**
      * Run the migrations.
@@ -15,17 +15,18 @@ class CreateColorFiguresTable extends Migration
      */
     public function up(): void
     {
+
         DB::beginTransaction();
 
         Schema::create($this->tableName, static function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->bigInteger('figure_id')->unsigned();
-            $table->bigInteger('color_id')->unsigned();
+            $table->bigInteger('template_id')->unsigned();
         });
 
         Schema::table($this->tableName, static function(Blueprint $table) {
+            $table->unique(['figure_id', 'template_id']);
             $table->foreign('figure_id')->references('id')->on('figures')->onDelete('CASCADE')->onUpdate('CASCADE');
-            $table->foreign('color_id')->references('id')->on('colors')->onDelete('CASCADE')->onUpdate('CASCADE');
+            $table->foreign('template_id')->references('id')->on('templates_figures')->onDelete('CASCADE')->onUpdate('CASCADE');
         });
 
         DB::commit();
@@ -41,9 +42,9 @@ class CreateColorFiguresTable extends Migration
     {
         DB::beginTransaction();
 
-        Schema::table($this->tableName, static function(Blueprint $table) {
-            $table->dropForeign('color_figures_figure_id_foreign');
-            $table->dropForeign('color_figures_color_id_foreign');
+        Schema::table($this->tableName, function(Blueprint $table) {
+            $table->dropForeign($this->tableName.'_figure_id_foreign');
+            $table->dropForeign($this->tableName.'_template_id_foreign');
         });
 
         Schema::dropIfExists($this->tableName);

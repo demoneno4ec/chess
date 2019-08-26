@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-class ColorFigureController extends Controller
+class FigurePositionController extends Controller
 {
     //
 }

@@ -3,8 +3,10 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateColorsTable extends Migration
+class CreatePositionsTable extends Migration
 {
+    protected $tableName = 'positions';
+
     /**
      * Run the migrations.
      *
@@ -12,10 +14,9 @@ class CreateColorsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('colors', static function (Blueprint $table) {
+        Schema::create($this->tableName, static function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code', 100)->unique();
-            $table->string('name_ru', 100);
+            $table->string('code')->unique();
         });
     }
 
@@ -26,6 +27,6 @@ class CreateColorsTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('colors');
+        Schema::dropIfExists($this->tableName);
     }
 }

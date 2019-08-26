@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Figure
@@ -19,10 +21,20 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Figure whereCode($value)
  * @method static Builder|Figure whereId($value)
  * @method static Builder|Figure whereNameRu($value)
+ * @property string $color
+ * @method static Builder|Figure whereColor($value)
+ * @property-read Collection|FigureTemplate[] $FigureTemplates
  */
-
 class Figure extends Model
 {
+    protected $table = 'figures';
+
+    protected $with = ['FigureTemplates'];
     protected $guarded = [];
     public $timestamps = false;
+
+    public function FigureTemplates(): HasMany
+    {
+        return $this->HasMany(FigureTemplate::class, 'figure_id', 'id');
+    }
 }

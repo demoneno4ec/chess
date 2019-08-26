@@ -3,245 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chess;
-use ArrayObject;
+use App\Models\ChessFigure;
+use App\Models\ChessPositionList;
+use App\Models\FigureTemplate;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class ChessController extends Controller
 {
-    protected $startPosition = [
-        [
-            'name' => 'a8',
-            'figure' => 'rook',
-            'color' => 'black',
-            'htmlCode' => '♜',
-        ],
-        [
-            'name' => 'b8',
-            'figure' => 'knight',
-            'color' => 'black',
-            'htmlCode' => '♞',
-        ],
-        [
-            'name' => 'c8',
-            'figure' => 'bishop',
-            'color' => 'black',
-            'htmlCode' => '♝',
-        ],
-        [
-            'name' => 'd8',
-            'figure' => 'queen',
-            'color' => 'black',
-            'htmlCode' => '♛',
-        ],
-        [
-            'name' => 'e8',
-            'figure' => 'king',
-            'color' => 'black',
-            'htmlCode' => '♚',
-        ],
-        [
-            'name' => 'f8',
-            'figure' => 'bishop',
-            'color' => 'black',
-            'htmlCode' => '♝',
-        ],
-        [
-            'name' => 'g8',
-            'figure' => 'knight',
-            'color' => 'black',
-            'htmlCode' => '♞',
-        ],
-        [
-            'name' => 'h8',
-            'figure' => 'rook',
-            'color' => 'black',
-            'htmlCode' => '♜',
-        ],
-        [
-            'name' => 'a7',
-            'figure' => 'pawn',
-            'color' => 'black',
-            'htmlCode' => '♟',
-        ],
-        [
-            'name' => 'b7',
-            'figure' => 'pawn',
-            'color' => 'black',
-            'htmlCode' => '♟',
-        ],
-        [
-            'name' => 'c7',
-            'figure' => 'pawn',
-            'color' => 'black',
-            'htmlCode' => '♟',
-        ],
-        [
-            'name' => 'd7',
-            'figure' => 'pawn',
-            'color' => 'black',
-            'htmlCode' => '♟',
-        ],
-        [
-            'name' => 'e7',
-            'figure' => 'pawn',
-            'color' => 'black',
-            'htmlCode' => '♟',
-        ],
-        [
-            'name' => 'f7',
-            'figure' => 'pawn',
-            'color' => 'black',
-            'htmlCode' => '♟',
-        ],
-        [
-            'name' => 'g7',
-            'figure' => 'pawn',
-            'color' => 'black',
-            'htmlCode' => '♟',
-        ],
-        [
-            'name' => 'h7',
-            'figure' => 'pawn',
-            'color' => 'black',
-            'htmlCode' => '♟',
-        ],
-        ['name' => 'a6'],
-        ['name' => 'b6'],
-        ['name' => 'c6'],
-        ['name' => 'd6'],
-        ['name' => 'e6'],
-        ['name' => 'f6'],
-        ['name' => 'g6'],
-        ['name' => 'h6'],
-
-        ['name' => 'a5'],
-        ['name' => 'b5'],
-        ['name' => 'c5'],
-        ['name' => 'd5'],
-        ['name' => 'e5'],
-        ['name' => 'f5'],
-        ['name' => 'g5'],
-        ['name' => 'h5'],
-
-        ['name' => 'a4'],
-        ['name' => 'b4'],
-        ['name' => 'c4'],
-        ['name' => 'd4'],
-        ['name' => 'e4'],
-        ['name' => 'f4'],
-        ['name' => 'g4'],
-        ['name' => 'h4'],
-
-        ['name' => 'a3'],
-        ['name' => 'b3'],
-        ['name' => 'c3'],
-        ['name' => 'd3'],
-        ['name' => 'e3'],
-        ['name' => 'f3'],
-        ['name' => 'g3'],
-        ['name' => 'h3'],
-        [
-            'name' => 'a2',
-            'figure' => 'pawn',
-            'color' => 'white',
-            'htmlCode' => '♙',
-        ],
-        [
-            'name' => 'b2',
-            'figure' => 'pawn',
-            'color' => 'white',
-            'htmlCode' => '♙',
-        ],
-        [
-            'name' => 'c2',
-            'figure' => 'pawn',
-            'color' => 'white',
-            'htmlCode' => '♙',
-        ],
-        [
-            'name' => 'd2',
-            'figure' => 'pawn',
-            'color' => 'white',
-            'htmlCode' => '♙',
-        ],
-        [
-            'name' => 'e2',
-            'figure' => 'pawn',
-            'color' => 'white',
-            'htmlCode' => '♙',
-        ],
-        [
-            'name' => 'f2',
-            'figure' => 'pawn',
-            'color' => 'white',
-            'htmlCode' => '♙',
-        ],
-        [
-            'name' => 'g2',
-            'figure' => 'pawn',
-            'color' => 'white',
-            'htmlCode' => '♙',
-        ],
-        [
-            'name' => 'h2',
-            'figure' => 'pawn',
-            'color' => 'white',
-            'htmlCode' => '♙',
-        ],
-
-        [
-            'name' => 'a1',
-            'figure' => 'rook',
-            'color' => 'white',
-            'htmlCode' => '♖',
-        ],
-        [
-            'name' => 'b1',
-            'figure' => 'knight',
-            'color' => 'white',
-            'htmlCode' => '♘',
-        ],
-        [
-            'name' => 'c1',
-            'figure' => 'bishop',
-            'color' => 'white',
-            'htmlCode' => '♗',
-        ],
-        [
-            'name' => 'd1',
-            'figure' => 'queen',
-            'color' => 'white',
-            'htmlCode' => '♕',
-        ],
-        [
-            'name' => 'e1',
-            'figure' => 'king',
-            'color' => 'white',
-            'htmlCode' => '♔',
-        ],
-        [
-            'name' => 'f1',
-            'figure' => 'bishop',
-            'color' => 'white',
-            'htmlCode' => '♗',
-        ],
-        [
-            'name' => 'g1',
-            'figure' => 'knight',
-            'color' => 'white',
-            'htmlCode' => '♘',
-        ],
-        [
-            'name' => 'h1',
-            'figure' => 'rook',
-            'color' => 'white',
-            'htmlCode' => '♖',
-        ],
+    protected $figures = [
+        'white' => ['king', 'queen', 'bishop', 'knight', 'rook', 'pawn'],
+        'black' => ['king', 'queen', 'bishop', 'knight', 'rook', 'pawn'],
     ];
 
+    protected $templateFigure = 'default';
 
     /**
      * Display a listing of the resource.
@@ -282,11 +58,57 @@ class ChessController extends Controller
      */
     public function show($codeChess)
     {
-        $chess = Chess::with('chessFigures')->where('code', $codeChess)->firstOrFail();
+        $chessPositions = ChessPositionList::with('Position')->whereHas('Chess', static function($query) use ($codeChess) {
+            $query->where('code', $codeChess);
+        })->get();
 
-//        $table = $chess;
+        $chessPositionIDs = $chessPositions->pluck('id');
 
-        $table = $this->createTable();
+        $chessFigures = ChessFigure::whereHas('Figure', static function($query){
+
+                $query->where(static function($queryFigure){
+                    $color = 'white';
+                    $queryFigure->where('color', $color)->whereIn('code', $this->figures[$color]);
+                })->orWhere(static function($queryFigure){
+                    $color = 'black';
+                    $queryFigure->where('color', $color)->whereIn('code', $this->figures[$color]);
+                });
+            })
+            ->whereHas('ChessPositionList', static function($query) use ($chessPositionIDs){
+                $query->whereIn('position_id', $chessPositionIDs);
+            })->get();
+
+        $figureIDs = $chessFigures->pluck('figure_id')->unique();
+
+        $figureTemplates = FigureTemplate::whereHas('TemplateFigure', static function ($query) use ($templateFigure) {
+                $query->where('template', $templateFigure);
+            })->whereHas('Figure', static function ($query) use ($figureIDs) {
+                $query->whereIn('id', $figureIDs);
+            })->get();
+
+        $table = collect();
+
+        $chessPositions->map(function (ChessPositionList $chessPosition, $index) use (&$table, $chessFigures, $figureTemplates){
+
+
+            $field = [
+                'code' => $chessPosition->Position->code,
+            ];
+            $color = $this->getColorSquare($index);
+            $field['color'] = $color;
+
+            $chessFigure = $chessFigures->firstWhere('position_id', $chessPosition->position_id);
+
+            if (!empty($chessFigure)){
+                $templateFigure = $figureTemplates->firstWhere('figure_id', $chessFigure->figure_id)->TemplateFigure;
+                $field['figure'] = [
+                    'code' => $templateFigure->code,
+                    'template' => $templateFigure->html_template
+                ];
+            }
+
+            $table->push($field);
+        });
 
         return view('index', ['table' => $table]);
     }
@@ -325,44 +147,6 @@ class ChessController extends Controller
         //
     }
 
-    private function createTable(): Collection
-    {
-        $table = $this->insertSquares();
-
-        return $table;
-    }
-
-    /**
-     * @return Collection
-     */
-    private function insertSquares(): Collection
-    {
-        $squares = collect();
-
-        $startPositions = collect($this->startPosition);
-
-        $startPositions->each(function($position, $indexPosition) use (&$squares){
-            $square = $this->getSquare($indexPosition);
-            $squares->push($square);
-        });
-
-        return $squares;
-    }
-
-    private function getSquare($indexPosition): ArrayObject
-    {
-        $square = new ArrayObject();
-
-        $position = $this->startPosition[$indexPosition];
-        $square->name = $position['name'];
-        $square->color = $this->getColorSquare($indexPosition);
-        if (isset($position['figure'])){
-            $square->figure = $this->getFigure($position);
-        }
-
-        return $square;
-    }
-
     private function getColorSquare($indexPosition): string
     {
         return $this->isBlackSquare($indexPosition) ? 'black': 'white';
@@ -374,17 +158,4 @@ class ChessController extends Controller
 
         return ($indexPosition%16 === $indexPosition%8) ? $isBlack : !$isBlack;
     }
-
-    private function getFigure($position)
-    {
-        $figure = new ArrayObject();
-
-        $figure->name = $position['figure'];
-        $figure->color = $position['color'];
-        $figure->html = $position['htmlCode'];
-
-        return $figure;
-    }
-
-
 }

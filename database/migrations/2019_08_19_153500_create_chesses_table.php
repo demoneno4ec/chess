@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateChessesTable extends Migration
 {
+    protected $tableName = 'chesses';
+
     /**
      * Run the migrations.
      *
@@ -13,7 +14,7 @@ class CreateChessesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('chesses', function (Blueprint $table) {
+        Schema::create($this->tableName, static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code', 100)->unique();
             $table->string('name_ru', 100);
@@ -27,6 +28,6 @@ class CreateChessesTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chesses');
+        Schema::dropIfExists($this->tableName);
     }
 }
