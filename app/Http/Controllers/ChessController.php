@@ -7,6 +7,8 @@ use App\Models\ChessFigure;
 use App\Models\ChessPositionList;
 use App\Models\FigureTemplate;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as CollectionSup;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -18,6 +20,22 @@ class ChessController extends Controller
     ];
 
     protected $templateFigure = 'default';
+    /**
+     * @var string
+     */
+    private $code = '';
+    /**
+     * @var Collection|static[]
+     */
+    private $positions;
+    /**
+     * @var Collection|static[]
+     */
+    private $chessFigures;
+    /**
+     * @var Collection|static[]
+     */
+    private $figureTemplate;
 
     /**
      * Display a listing of the resource.
@@ -53,62 +71,20 @@ class ChessController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param $codeChess
+     * @param $code
      * @return Factory|View
      */
-    public function show($codeChess)
+    public function show($code)
     {
-        $chessPositions = ChessPositionList::with('Position')->whereHas('Chess', static function($query) use ($codeChess) {
-            $query->where('code', $codeChess);
-        })->get();
+        $this->setCode($code);
 
-        $chessPositionIDs = $chessPositions->pluck('id');
+        $this->setPositions();
 
-        $chessFigures = ChessFigure::whereHas('Figure', static function($query){
+        $this->setFigures();
 
-                $query->where(static function($queryFigure){
-                    $color = 'white';
-                    $queryFigure->where('color', $color)->whereIn('code', $this->figures[$color]);
-                })->orWhere(static function($queryFigure){
-                    $color = 'black';
-                    $queryFigure->where('color', $color)->whereIn('code', $this->figures[$color]);
-                });
-            })
-            ->whereHas('ChessPositionList', static function($query) use ($chessPositionIDs){
-                $query->whereIn('position_id', $chessPositionIDs);
-            })->get();
+        $this->setFigureTemplate();
 
-        $figureIDs = $chessFigures->pluck('figure_id')->unique();
-
-        $figureTemplates = FigureTemplate::whereHas('TemplateFigure', static function ($query) use ($templateFigure) {
-                $query->where('template', $templateFigure);
-            })->whereHas('Figure', static function ($query) use ($figureIDs) {
-                $query->whereIn('id', $figureIDs);
-            })->get();
-
-        $table = collect();
-
-        $chessPositions->map(function (ChessPositionList $chessPosition, $index) use (&$table, $chessFigures, $figureTemplates){
-
-
-            $field = [
-                'code' => $chessPosition->Position->code,
-            ];
-            $color = $this->getColorSquare($index);
-            $field['color'] = $color;
-
-            $chessFigure = $chessFigures->firstWhere('position_id', $chessPosition->position_id);
-
-            if (!empty($chessFigure)){
-                $templateFigure = $figureTemplates->firstWhere('figure_id', $chessFigure->figure_id)->TemplateFigure;
-                $field['figure'] = [
-                    'code' => $templateFigure->code,
-                    'template' => $templateFigure->html_template
-                ];
-            }
-
-            $table->push($field);
-        });
+        $table = $this->getTable();
 
         return view('index', ['table' => $table]);
     }
@@ -147,15 +123,142 @@ class ChessController extends Controller
         //
     }
 
+
     private function getColorSquare($indexPosition): string
     {
-        return $this->isBlackSquare($indexPosition) ? 'black': 'white';
+        return $this->isBlackSquare($indexPosition) ? 'black' : 'white';
     }
 
     private function isBlackSquare($indexPosition): bool
     {
-        $isBlack = (boolean) ($indexPosition%2);
+        $isBlack = (boolean) ($indexPosition % 2);
 
-        return ($indexPosition%16 === $indexPosition%8) ? $isBlack : !$isBlack;
+        return ($indexPosition % 16 === $indexPosition % 8) ? $isBlack : !$isBlack;
+    }
+
+    /**
+     * @return CollectionSup
+     */
+    private function getTable(): CollectionSup
+    {
+        $table = collect();
+
+        $this->getPositions()->map(function (ChessPositionList $chessPosition, $index) use (&$table) {
+            $field = [
+                'code' => $chessPosition->Position->code,
+            ];
+            $color = $this->getColorSquare($index);
+            $field['color'] = $color;
+
+            $chessFigure = $this->getChessFigures()
+                ->firstWhere('position_id', $chessPosition->position_id);
+
+            if (!empty($chessFigure)) {
+                $templateFigure = $this->getFigureTemplate()
+                    ->firstWhere('figure_id', $chessFigure->figure_id)
+                    ->TemplateFigure;
+                $field['figure'] = [
+                    'code' => $templateFigure->code,
+                    'template' => $templateFigure->html_template
+                ];
+            }
+
+            $table->push($field);
+        });
+
+        return $table;
+    }
+
+
+    /**setters*/
+    /**
+     * @param $code
+     */
+
+    private function setCode($code): void
+    {
+        $this->code = strip_tags($code);
+    }
+
+    private function setFigures(): void
+    {
+        $chessFigures = ChessFigure::whereHas('Figure', function ($query) {
+            $query->where(function ($queryFigure) {
+                $color = 'white';
+                $queryFigure->where('color', $color)->whereIn('code', $this->figures[$color]);
+            })->orWhere(function ($queryFigure) {
+                $color = 'black';
+                $queryFigure->where('color', $color)->whereIn('code', $this->figures[$color]);
+            });
+        })
+            ->whereHas('ChessPositionList', function ($query) {
+                $query->whereIn('position_id', $this->getPositions()->pluck('id'));
+            });
+
+        if ($chessFigures->count() > 0) {
+            $this->chessFigures = $chessFigures->get();
+        }
+    }
+
+    private function setPositions(): void
+    {
+        $checkPositionList = ChessPositionList::with('Position')->whereHas('Chess', function ($query) {
+            $query->where('code', $this->getCode());
+        });
+
+        if ($checkPositionList->count() > 0) {
+            $this->positions = $checkPositionList->get();
+        }
+    }
+
+    private function setFigureTemplate(): void
+    {
+        $figureIDs = $this->getChessFigures()->pluck('figure_id')->unique();
+
+        $figureTemplates = FigureTemplate::whereHas('TemplateFigure', function ($query) {
+            $query->where('template', $this->templateFigure);
+        })->whereHas('Figure', static function ($query) use ($figureIDs) {
+            $query->whereIn('id', $figureIDs);
+        });
+
+        if ($figureTemplates->count() > 0) {
+            $this->figureTemplate = $figureTemplates->get();
+        }
+
+    }
+
+
+    /**getters*/
+
+    /**
+     * @return Collection|static[]
+     */
+    public function getPositions()
+    {
+        return $this->positions;
+    }
+
+    /**
+     * @return Collection|static[]
+     */
+    public function getChessFigures()
+    {
+        return $this->chessFigures;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @return Collection|static[]
+     */
+    public function getFigureTemplate()
+    {
+        return $this->figureTemplate;
     }
 }
