@@ -11,4 +11,8 @@
 |
 */
 
+//Route::view('/', 'index');
+Route::get('/', function(){
+    return view('index');
+});
 Route::get('/chess/{chess_code}', 'ChessController@show');

@@ -86,7 +86,7 @@ class ChessController extends Controller
 
         $table = $this->getTable();
 
-        return view('index', ['table' => $table]);
+        return view('chess/index', ['table' => $table]);
     }
 
     /**
@@ -131,9 +131,13 @@ class ChessController extends Controller
 
     private function isBlackSquare($indexPosition): bool
     {
+        return ($indexPosition % 8 + (int) $indexPosition / 8) % 2;
+
+        /*my
         $isBlack = (boolean) ($indexPosition % 2);
 
         return ($indexPosition % 16 === $indexPosition % 8) ? $isBlack : !$isBlack;
+        */
     }
 
     /**

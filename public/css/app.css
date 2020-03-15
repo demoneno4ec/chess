@@ -508,8 +508,6 @@ template {
 [hidden] {
   display: none;
 }
-@charset "UTF-8";
-
 body {
   position: relative;
   display: flex;
@@ -585,5 +583,11 @@ main {
 
 .figure {
   font-size: 60px;
+}
+
+@media (max-width: 500px) {
+  .figure {
+    font-size: 10vw;
+  }
 }
 
